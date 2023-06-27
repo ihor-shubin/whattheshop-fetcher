@@ -44,6 +44,16 @@ public record AnalyticVisitorCountHour([property: Key] Guid Id, string ZoneId, s
 
 public record AnalyticVisitorCountHourDay([property: Key] Guid Id, string ZoneId, string Day, string Hour, int Count);
 
+public record AnalyticVisitorCountHourDayDetails([property: Key] Guid Id, string ZoneId, string Date, double Count);
+
+public record AnalyticVisitorCountHourDayStart([property: Key] Guid Id, string ZoneId, string Date, int Count);
+
+public record AnalyticVisitorCountSum([property: Key] Guid Id, string ZoneId, string Hour, double Count);
+
+public record AnalyticVisitorCountCommon([property: Key] string ZoneId, double? Count);
+
+public record AnalyticDeviceCount([property: Key] string ZoneId, double? Android, double? Ios);
+
 public record CampaignList(string ZoneId, string ZoneName, List<string> Campaigns);
 
 public record CampaignCount(string ZoneId, string ZoneName, string CampaignId, int Total, int Confirmed, int Target, int TargetDuration);

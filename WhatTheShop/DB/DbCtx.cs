@@ -46,6 +46,16 @@ public class DbCtx: DbContext
     public DbSet<AnalyticVisitorCountHour> AnalyticVisitorCountHours { get; set; } = null!;
     
     public DbSet<AnalyticVisitorCountHourDay> AnalyticVisitorCountHourDays { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitorCountHourDayDetails> AnalyticVisitorCountHourDayDetails { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitorCountHourDayStart> AnalyticVisitorCountHourDayStart { get; set; } = null!;
+
+    public DbSet<AnalyticVisitorCountSum> AnalyticVisitorCountSum { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitorCountCommon> AnalyticVisitorCountCommon { get; set; } = null!;
+    
+    public DbSet<AnalyticDeviceCount> AnalyticDeviceCount { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={Path.Combine(Path.GetTempPath(), "WhatTheShop.sqlite")}");

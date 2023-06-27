@@ -25,17 +25,17 @@ internal class Program
 
         // await RunAnalyticPasserBy(apiClient, db);
         // await RunAnalyticPassing(apiClient, db);
-        await RunAnalyticVisitor(apiClient, db);
-        /*await RunAnalyticsVisit(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsRecord(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsInstore(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsZones(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsRaw(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsDevice(apiClient, wtsToken, zones, devices);
-        await RunAnalyticsSystem(apiClient, wtsToken, zones, devices);
-        await RunMediaVisits(apiClient, wtsToken, zones, devices);
-        await RunMediaCampaign(apiClient, wtsToken, zones, devices);
-        await RunAnalyticSensor(apiClient, wtsToken, zones, devices);*/
+        //await RunAnalyticVisitor(apiClient, db);
+        //await RunAnalyticsVisit(apiClient, wtsToken, zones, devices);
+        //await RunAnalyticsRecord(apiClient, wtsToken, zones, devices);
+        //await RunAnalyticsInstore(apiClient, wtsToken, zones, devices);
+        //await RunAnalyticsZones(apiClient, wtsToken, zones, devices);
+        //await RunAnalyticsRaw(apiClient, wtsToken, zones, devices);
+        await RunAnalyticDevice(apiClient, db);
+        //await RunAnalyticsSystem(apiClient, wtsToken, zones, devices);
+        //await RunMediaVisits(apiClient, wtsToken, zones, devices);
+        //await RunMediaCampaign(apiClient, wtsToken, zones, devices);
+        //await RunAnalyticSensor(apiClient, wtsToken, zones, devices);
 
         // save excel file
         if (File.Exists(fileName))
@@ -85,13 +85,13 @@ internal class Program
     {
         var service = new AnalyticVisitorService(apiClient, db);
 
-        //await service.FetchAnalyticVisitorCount();
-        //await service.FetchAnalyticVisitorCountDetails();
-        //await service.FetchAnalyticVisitorDuration();
-        //await service.FetchAnalyticVisitorDurationDetails();
-        //await service.FetchAnalyticVisitorBestTimes();
-        //await service.FetchAnalyticVisitorCountHour();
-        await service.FetchAnalyticVisitorCountHourDay();
+        await service.FetchAnalyticVisitorCount();
+        await service.FetchAnalyticVisitorCountDetails();
+        await service.FetchAnalyticVisitorDuration();
+        await service.FetchAnalyticVisitorDurationDetails();
+        await service.FetchAnalyticVisitorBestTimes();
+        await service.FetchAnalyticVisitorCountHour();
+        await service.FetchAnalyticVisitorCountHourDay(); // !
         await service.FetchAnalyticVisitorCountHourDayDetails();
         await service.FetchAnalyticVisitorCountHourDayStart();
         await service.FetchAnalyticVisitorCountSum();
@@ -104,7 +104,7 @@ internal class Program
         var analyticSensorCount = await apiClient.GetAnalyticSensorCount(zones);
     }
 
-    private static async Task RunMediaCampaign(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunMediaCampaign(ApiClient apiClient, List<Zone> zones)
     {
         Console.WriteLine("Fetching /1/media/campaign/list...");
         var campaignList = await apiClient.GetCampaignList(zones);
@@ -113,39 +113,42 @@ internal class Program
         var campaignCount = await apiClient.GetCampaignCount(zones, campaignList);
     }
 
-    private static async Task RunMediaVisits(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunMediaVisits(ApiClient apiClient)
     {
 
     }
 
-    private static async Task RunAnalyticsSystem(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticsSystem(ApiClient apiClient)
     {
 
     }
 
-    private static async Task RunAnalyticsDevice(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticDevice(ApiClient apiClient, DbCtx db)
     {
+        var service = new AnalyticDeviceService(apiClient, db);
+
+        await service.FetchAnalyticDeviceCount();
     }
 
-    private static async Task RunAnalyticsRaw(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
-    {
-
-    }
-
-    private static async Task RunAnalyticsZones(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticsRaw(ApiClient apiClient)
     {
 
     }
 
-    private static async Task RunAnalyticsInstore(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticsZones(ApiClient apiClient)
+    {
+
+    }
+
+    private static async Task RunAnalyticsInstore(ApiClient apiClient)
     {
     }
 
-    private static async Task RunAnalyticsRecord(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticsRecord(ApiClient apiClient)
     {
     }
 
-    private static async Task RunAnalyticsVisit(ApiClient apiClient, string wtsToken, List<Zone> zones, List<Device> devices)
+    private static async Task RunAnalyticsVisit(ApiClient apiClient)
     {
     }
 }

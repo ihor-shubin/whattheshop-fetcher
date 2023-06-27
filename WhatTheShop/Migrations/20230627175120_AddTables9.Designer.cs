@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatTheShop.DB;
 
@@ -10,28 +11,14 @@ using WhatTheShop.DB;
 namespace WhatTheShop.Migrations
 {
     [DbContext(typeof(DbCtx))]
-    partial class DbCtxModelSnapshot : ModelSnapshot
+    [Migration("20230627175120_AddTables9")]
+    partial class AddTables9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
-
-            modelBuilder.Entity("WhatTheShop.Models.AnalyticDeviceCount", b =>
-                {
-                    b.Property<string>("ZoneId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("Android")
-                        .HasColumnType("REAL");
-
-                    b.Property<double?>("Ios")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ZoneId");
-
-                    b.ToTable("AnalyticDeviceCount");
-                });
 
             modelBuilder.Entity("WhatTheShop.Models.AnalyticPasserbyBestTimes", b =>
                 {
@@ -305,7 +292,7 @@ namespace WhatTheShop.Migrations
                     b.Property<string>("ZoneId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("Count")
+                    b.Property<double>("Count")
                         .HasColumnType("REAL");
 
                     b.HasKey("ZoneId");

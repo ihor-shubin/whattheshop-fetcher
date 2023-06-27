@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatTheShop.DB;
 
@@ -10,28 +11,14 @@ using WhatTheShop.DB;
 namespace WhatTheShop.Migrations
 {
     [DbContext(typeof(DbCtx))]
-    partial class DbCtxModelSnapshot : ModelSnapshot
+    [Migration("20230627172024_AddTables7")]
+    partial class AddTables7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
-
-            modelBuilder.Entity("WhatTheShop.Models.AnalyticDeviceCount", b =>
-                {
-                    b.Property<string>("ZoneId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("Android")
-                        .HasColumnType("REAL");
-
-                    b.Property<double?>("Ios")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ZoneId");
-
-                    b.ToTable("AnalyticDeviceCount");
-                });
 
             modelBuilder.Entity("WhatTheShop.Models.AnalyticPasserbyBestTimes", b =>
                 {
@@ -300,19 +287,6 @@ namespace WhatTheShop.Migrations
                     b.ToTable("AnalyticVisitorCounts");
                 });
 
-            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorCountCommon", b =>
-                {
-                    b.Property<string>("ZoneId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("Count")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ZoneId");
-
-                    b.ToTable("AnalyticVisitorCountCommon");
-                });
-
             modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorCountDetails", b =>
                 {
                     b.Property<Guid>("Id")
@@ -412,50 +386,6 @@ namespace WhatTheShop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AnalyticVisitorCountHourDayDetails");
-                });
-
-            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorCountHourDayStart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Date")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ZoneId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnalyticVisitorCountHourDayStart");
-                });
-
-            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorCountSum", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Count")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Hour")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ZoneId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnalyticVisitorCountSum");
                 });
 
             modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorDuration", b =>
