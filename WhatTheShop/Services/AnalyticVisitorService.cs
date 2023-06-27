@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WhatTheShop.DB;
+using WhatTheShop.Models;
 
 namespace WhatTheShop.Services;
 
@@ -229,12 +230,42 @@ public class AnalyticVisitorService
         }
     }
 
-    public async Task FetchAnalyticVisitorCoutHourDay()
+    public async Task FetchAnalyticVisitorCountHourDay()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Fetching /1/analytic/visitor/counthourday...");
+
+        if (_overwriteDb)
+        {
+            await _db.AnalyticVisitorCountHourDays.ExecuteDeleteAsync();
+        }
+
+        for (var i = 0; i < _zones.Count; i++)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var zone = _zones[i];
+            List<AnalyticVisitorCountHourDay> result;
+
+            if (!_overwriteDb && _db.AnalyticVisitorCountHourDays.Any(x => x.ZoneId == zone.Id))
+            {
+                Console.WriteLine("\tReading from DB...");
+                result = _db.AnalyticVisitorCountHourDays.Where(x => x.ZoneId == zone.Id).ToList();
+            }
+            else
+            {
+                Console.WriteLine("\tReading from API...");
+                result = await _worker.GetAnalyticVisitorCountHourDay(zone.Id);
+
+                _db.AnalyticVisitorCountHourDays.AddRange(result);
+                await _db.SaveChangesAsync();
+            }
+
+            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
+        }
     }
 
-    public async Task FetchAnalyticVisitorCoutHourDayDetails()
+    public async Task FetchAnalyticVisitorCountHourDayDetails()
     {
         throw new NotImplementedException();
     }

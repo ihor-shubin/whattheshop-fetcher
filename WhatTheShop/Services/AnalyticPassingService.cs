@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WhatTheShop.DB;
+using WhatTheShop.Models;
 
 namespace WhatTheShop.Services;
 

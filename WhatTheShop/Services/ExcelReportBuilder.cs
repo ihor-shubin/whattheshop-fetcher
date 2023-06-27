@@ -1,8 +1,9 @@
 ﻿using ClosedXML.Excel;
+using WhatTheShop.Models;
 
-namespace WhatTheShop;
+namespace WhatTheShop.Services;
 
-public class ExcelService
+public class ExcelReportBuilder
 {
     public static void WriteZones(List<Zone> zones, XLWorkbook workbook)
     {
@@ -26,7 +27,7 @@ public class ExcelService
             worksheet.Cell($"D{i + 3}").Value = zones[i].Fullname;
         }
 
-        var rangeTable = worksheet.Range($"A2:D{zones.Count+2}");
+        var rangeTable = worksheet.Range($"A2:D{zones.Count + 2}");
         rangeTable.CreateTable();
         worksheet.Columns().AdjustToContents();
     }
@@ -69,7 +70,7 @@ public class ExcelService
             worksheet.Cell($"N{i + 3}").Value = zoneInfos[i].Sensors;
         }
 
-        var rangeTable = worksheet.Range($"A2:N{zoneInfos.Count+2}");
+        var rangeTable = worksheet.Range($"A2:N{zoneInfos.Count + 2}");
         rangeTable.CreateTable();
         worksheet.Columns().AdjustToContents();
     }
@@ -96,7 +97,7 @@ public class ExcelService
             worksheet.Cell($"D{i + 3}").Value = devices[i].CryptTokens;
         }
 
-        var rangeTable = worksheet.Range($"A2:D{devices.Count+2}");
+        var rangeTable = worksheet.Range($"A2:D{devices.Count + 2}");
         rangeTable.CreateTable();
         worksheet.Columns().AdjustToContents();
     }
@@ -122,7 +123,7 @@ public class ExcelService
         worksheet.Cell("A5").Style.Font.Bold = true;
         worksheet.Cell("B5").Value = monitoring.SensorsTotal;
 
-        worksheet.Columns(1,1).AdjustToContents();
+        worksheet.Columns(1, 1).AdjustToContents();
     }
 
     public static void WriteAnalyticPasserby(AnalyticPasserbyCount analyticPasserbyCount, XLWorkbook workbook)
@@ -150,7 +151,7 @@ public class ExcelService
         worksheet.Cell("A6").Style.Font.Bold = true;
         worksheet.Cell("B6").Value = analyticPasserbyCount.Total;*/
 
-        worksheet.Columns(1,1).AdjustToContents();
+        worksheet.Columns(1, 1).AdjustToContents();
     }
 
     public static void WriteAnalyticPasserbyDetails(List<AnalyticPasserbyCountDetails> analyticPasserbyDetails, XLWorkbook workbook)
@@ -177,7 +178,7 @@ public class ExcelService
             worksheet.Cell($"E{i + 3}").Value = analyticPasserbyDetails[i].AnalyticPasserbyCount.Total;*/
         }
 
-        var rangeTable = worksheet.Range($"A2:E{analyticPasserbyDetails.Count+2}");
+        var rangeTable = worksheet.Range($"A2:E{analyticPasserbyDetails.Count + 2}");
         rangeTable.CreateTable();
         worksheet.Columns().AdjustToContents();
     }
@@ -200,7 +201,7 @@ public class ExcelService
             worksheet.Cell($"B{i + 3}").Value = analyticPasserbyPerHour[i].Count;
         }
 
-        var rangeTable = worksheet.Range($"A2:D{analyticPasserbyPerHour.Count+2}");
+        var rangeTable = worksheet.Range($"A2:D{analyticPasserbyPerHour.Count + 2}");
         rangeTable.CreateTable();
         worksheet.Columns().AdjustToContents();
     }

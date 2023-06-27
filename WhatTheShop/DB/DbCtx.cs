@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WhatTheShop.Models;
 
 namespace WhatTheShop.DB;
 
@@ -43,6 +44,8 @@ public class DbCtx: DbContext
     public DbSet<AnalyticVisitorBestTimes> AnalyticVisitorBestTimes { get; set; } = null!;
     
     public DbSet<AnalyticVisitorCountHour> AnalyticVisitorCountHours { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitorCountHourDay> AnalyticVisitorCountHourDays { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={Path.Combine(Path.GetTempPath(), "WhatTheShop.sqlite")}");

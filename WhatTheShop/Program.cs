@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
+using WhatTheShop.Models;
 using WhatTheShop.Services;
 
 namespace WhatTheShop;
@@ -22,7 +23,7 @@ internal class Program
 
         await RunUser(apiClient, db);
 
-        // await RunAnalyticsPasserBy(apiClient, db);
+        // await RunAnalyticPasserBy(apiClient, db);
         // await RunAnalyticPassing(apiClient, db);
         await RunAnalyticVisitor(apiClient, db);
         /*await RunAnalyticsVisit(apiClient, wtsToken, zones, devices);
@@ -58,7 +59,7 @@ internal class Program
         await service.FetchMonitoring();
     }
 
-    private static async Task RunAnalyticsPasserBy(ApiClient apiClient, DbCtx db)
+    private static async Task RunAnalyticPasserBy(ApiClient apiClient, DbCtx db)
     {
         var service = new AnalyticPasserbyService(apiClient, db);
 
@@ -89,9 +90,9 @@ internal class Program
         //await service.FetchAnalyticVisitorDuration();
         //await service.FetchAnalyticVisitorDurationDetails();
         //await service.FetchAnalyticVisitorBestTimes();
-        await service.FetchAnalyticVisitorCountHour();
-        await service.FetchAnalyticVisitorCoutHourDay();
-        await service.FetchAnalyticVisitorCoutHourDayDetails();
+        //await service.FetchAnalyticVisitorCountHour();
+        await service.FetchAnalyticVisitorCountHourDay();
+        await service.FetchAnalyticVisitorCountHourDayDetails();
         await service.FetchAnalyticVisitorCountHourDayStart();
         await service.FetchAnalyticVisitorCountSum();
         await service.FetchAnalyticVisitorCountCommon();

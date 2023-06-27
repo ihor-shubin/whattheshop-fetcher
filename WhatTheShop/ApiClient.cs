@@ -1,6 +1,7 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
+using WhatTheShop.Models;
 
 namespace WhatTheShop;
 
@@ -20,8 +21,8 @@ public class ApiClient
     {
         _url = "https://api.whattheshop.net";
         
-        _userName = Environment.GetEnvironmentVariable("whattheshop_UserName")!;
-        _userPassword = Environment.GetEnvironmentVariable("whattheshop_Password")!;
+        _userName = Environment.GetEnvironmentVariable("whattheshop_UserName", EnvironmentVariableTarget.User)!;
+        _userPassword = Environment.GetEnvironmentVariable("whattheshop_Password", EnvironmentVariableTarget.User)!;
 
         _startDateParam = DateTime.Now.AddMonths(0).AddDays(-2); // the only 2 last years available
 
@@ -687,5 +688,30 @@ public class ApiClient
             .ToList();
 
         return result;
+    }
+
+    public async Task<List<AnalyticVisitorCountHourDay>> GetAnalyticVisitorCountHourDay(string zoneId)
+    {
+        var urlPart = "/1/analytic/visitor/counthourday";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticVisitorCountHourDay>();
+        }
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"];
+
+        return null;
     }
 }
