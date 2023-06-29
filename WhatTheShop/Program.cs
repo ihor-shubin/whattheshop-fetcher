@@ -29,9 +29,9 @@ internal class Program
         //await RunAnalyticsVisit(apiClient, wtsToken, zones, devices);
         //await RunAnalyticsRecord(apiClient, wtsToken, zones, devices);
         //await RunAnalyticsInstore(apiClient, wtsToken, zones, devices);
-        //await RunAnalyticsZones(apiClient, wtsToken, zones, devices);
+        await RunAnalyticZones(apiClient, db);
         //await RunAnalyticsRaw(apiClient, wtsToken, zones, devices);
-        await RunAnalyticDevice(apiClient, db);
+        //await RunAnalyticDevice(apiClient, db);
         //await RunAnalyticsSystem(apiClient, wtsToken, zones, devices);
         //await RunMediaVisits(apiClient, wtsToken, zones, devices);
         //await RunMediaCampaign(apiClient, wtsToken, zones, devices);
@@ -135,7 +135,7 @@ internal class Program
 
     }
 
-    private static async Task RunAnalyticsZones(ApiClient apiClient)
+    private static async Task RunAnalyticZones(ApiClient apiClient)
     {
 
     }

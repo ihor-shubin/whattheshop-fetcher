@@ -24,8 +24,8 @@ public class ApiClient
         _userName = Environment.GetEnvironmentVariable("whattheshop_UserName", EnvironmentVariableTarget.User)!;
         _userPassword = Environment.GetEnvironmentVariable("whattheshop_Password", EnvironmentVariableTarget.User)!;
 
-        _startDateParam = DateTime.Now.AddYears(-2).AddDays(1); // the only 2 last years available
-        //_startDateParam = DateTime.Now.AddMonths(0).AddDays(-2); // the only 2 last years available
+        //_startDateParam = DateTime.Now.AddYears(-2).AddDays(1); // the only 2 last years available
+        _startDateParam = DateTime.Now.AddMonths(0).AddDays(-2); // the only 2 last years available
 
         _token = this.GetToken().GetAwaiter().GetResult();
     }
