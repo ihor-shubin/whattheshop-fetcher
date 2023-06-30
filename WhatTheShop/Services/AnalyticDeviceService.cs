@@ -22,7 +22,7 @@ public class AnalyticDeviceService
 
     public async Task FetchAnalyticDeviceCount()
     {
-        Console.WriteLine("Fetching /1/analytic/devices/coun...");
+        Console.WriteLine("Fetching /1/analytic/devices/count...");
 
         if (_overwriteDb)
         {

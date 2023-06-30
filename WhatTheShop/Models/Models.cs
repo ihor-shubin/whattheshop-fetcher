@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WhatTheShop.Models;
 
@@ -54,6 +55,28 @@ public record AnalyticVisitorCountCommon([property: Key] string ZoneId, double? 
 
 public record AnalyticDeviceCount([property: Key] string ZoneId, double? Android, double? Ios);
 
-public record CampaignList(string ZoneId, string ZoneName, List<string> Campaigns);
+public record AnalyticZonesGeneral([property: Key] string ZoneId, int Percentage, string? Cnt, int Average, string Min, string Max);
 
-public record CampaignCount(string ZoneId, string ZoneName, string CampaignId, int Total, int Confirmed, int Target, int TargetDuration);
+public record AnalyticZonesVenn([property: Key] string ZoneId, double? Count);
+
+public record CampaignList(string ZoneId, string ZoneName, List<string> Campaigns); // need work
+
+public record CampaignCount(string ZoneId, string ZoneName, string CampaignId, int Total, int Confirmed, int Target, int TargetDuration); // need work
+
+public record MediaVisitCount([property: Key] string ZoneId, int Facebook, int Google, int Teemo);
+
+public record MediaVisitCountDetails([property: Key] Guid Id, string ZoneId, string Date, int Facebook, int Google, int Teemo);
+
+public record AnalyticSensorCount([property: Key] string ZoneId, double? PresenceValue, double? PresenceMaxValue, string? PresenceLastUpdate, double? InValue, double? OutValue, double? AbsoluteValue);
+
+public record AnalyticSensorCountDetails([property: Key] Guid Id, string ZoneId, string Date, double? PresenceValue, double? InValue, double? OutValue, double? AbsoluteValue);
+
+public record AnalyticSystemLastUpdate([property: Key] string ZoneId, string? Date, [property: Column("NeedUpdate")] bool? NeedUpdate);
+
+public record AnalyticSystemQuickLastUpdate([property: Key] string ZoneId, string? Date, [property: Column("NeedUpdate")] bool? NeedUpdate);
+
+public record AnalyticSystemForceRefresh([property: Key] string ZoneId, bool? Result);
+
+public record AnalyticSystemTemporaryTable([property: Key] string ZoneId, string? Context, string? Table);
+
+public record AnalyticRawPasserby([property: Key] Guid Id, string ZoneId, string Uid, string UserMac, string DateStart, string DateEnd, string IsLocal);

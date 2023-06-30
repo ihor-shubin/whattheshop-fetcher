@@ -252,6 +252,163 @@ namespace WhatTheShop.Migrations
                     b.ToTable("AnalyticPassingCountHourDetails");
                 });
 
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticRawPasserby", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateEnd")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateStart")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IsLocal")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserMac")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticRawPasserby");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSensorCount", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("AbsoluteValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("InValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("OutValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("PresenceLastUpdate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("PresenceMaxValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("PresenceValue")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticSensorCount");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSensorCountDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("AbsoluteValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("InValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("OutValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("PresenceValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticSensorCountDetails");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSystemForceRefresh", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Result")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticSystemForceRefresh");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSystemLastUpdate", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("NeedUpdate")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("NeedUpdate");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticSystemLastUpdate");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSystemQuickLastUpdate", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("NeedUpdate")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("NeedUpdate");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticSystemQuickLastUpdate");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticSystemTemporaryTable", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Context")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Table")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticSystemTemporaryTable");
+                });
+
             modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorBestTimes", b =>
                 {
                     b.Property<string>("ZoneId")
@@ -511,6 +668,46 @@ namespace WhatTheShop.Migrations
                     b.ToTable("AnalyticVisitorDurationDetails");
                 });
 
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticZonesGeneral", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Average")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Cnt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Max")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Min")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticZonesGeneral");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticZonesVenn", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("Count")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticZonesVenn");
+                });
+
             modelBuilder.Entity("WhatTheShop.Models.Device", b =>
                 {
                     b.Property<string>("Name")
@@ -529,6 +726,53 @@ namespace WhatTheShop.Migrations
                     b.HasKey("Name");
 
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.MediaVisitCount", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Facebook")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Google")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Teemo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("MediaVisitCount");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.MediaVisitCountDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Facebook")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Google")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Teemo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MediaVisitCountDetails");
                 });
 
             modelBuilder.Entity("WhatTheShop.Models.Monitoring", b =>

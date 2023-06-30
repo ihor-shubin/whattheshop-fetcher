@@ -56,6 +56,28 @@ public class DbCtx: DbContext
     public DbSet<AnalyticVisitorCountCommon> AnalyticVisitorCountCommon { get; set; } = null!;
     
     public DbSet<AnalyticDeviceCount> AnalyticDeviceCount { get; set; } = null!;
+    
+    public DbSet<AnalyticZonesGeneral> AnalyticZonesGeneral { get; set; } = null!;
+    
+    public DbSet<AnalyticZonesVenn> AnalyticZonesVenn { get; set; } = null!;
+    
+    public DbSet<MediaVisitCount> MediaVisitCount { get; set; } = null!;
+
+    public DbSet<MediaVisitCountDetails> MediaVisitCountDetails { get; set; } = null!;
+    
+    public DbSet<AnalyticSensorCount> AnalyticSensorCount { get; set; } = null!;
+    
+    public DbSet<AnalyticSensorCountDetails> AnalyticSensorCountDetails { get; set; } = null!;
+    
+    public DbSet<AnalyticSystemLastUpdate> AnalyticSystemLastUpdate { get; set; } = null!;
+    
+    public DbSet<AnalyticSystemQuickLastUpdate> AnalyticSystemQuickLastUpdate { get; set; } = null!;
+    
+    public DbSet<AnalyticSystemForceRefresh> AnalyticSystemForceRefresh { get; set; } = null!;
+    
+    public DbSet<AnalyticSystemTemporaryTable> AnalyticSystemTemporaryTable { get; set; } = null!;
+    
+    public DbSet<AnalyticRawPasserby> AnalyticRawPasserby { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={Path.Combine(Path.GetTempPath(), "WhatTheShop.sqlite")}");

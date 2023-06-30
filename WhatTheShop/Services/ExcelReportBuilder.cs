@@ -135,21 +135,21 @@ public class ExcelReportBuilder
         worksheet.Range("A1:D1").Row(1).Merge();
 
         // Tables header
-        /*worksheet.Cell("A3").Value = "New";
+        /*worksheet.Cell("A3").NeedUpdate = "New";
         worksheet.Cell("A3").Style.Font.Bold = true;
-        worksheet.Cell("B3").Value = analyticPasserbyCount.New;
+        worksheet.Cell("B3").NeedUpdate = analyticPasserbyCount.New;
 
-        worksheet.Cell("A4").Value = "Low";
+        worksheet.Cell("A4").NeedUpdate = "Low";
         worksheet.Cell("A4").Style.Font.Bold = true;
-        worksheet.Cell("B4").Value = analyticPasserbyCount.Low;
+        worksheet.Cell("B4").NeedUpdate = analyticPasserbyCount.Low;
 
-        worksheet.Cell("A5").Value = "Frequent";
+        worksheet.Cell("A5").NeedUpdate = "Frequent";
         worksheet.Cell("A5").Style.Font.Bold = true;
-        worksheet.Cell("B5").Value = analyticPasserbyCount.Frequent;
+        worksheet.Cell("B5").NeedUpdate = analyticPasserbyCount.Frequent;
 
-        worksheet.Cell("A6").Value = "Total";
+        worksheet.Cell("A6").NeedUpdate = "Total";
         worksheet.Cell("A6").Style.Font.Bold = true;
-        worksheet.Cell("B6").Value = analyticPasserbyCount.Total;*/
+        worksheet.Cell("B6").NeedUpdate = analyticPasserbyCount.Total;*/
 
         worksheet.Columns(1, 1).AdjustToContents();
     }
@@ -171,11 +171,11 @@ public class ExcelReportBuilder
 
         for (int i = 0; i < analyticPasserbyDetails.Count; i++)
         {
-            /*worksheet.Cell($"A{i + 3}").Value = analyticPasserbyDetails[i].Date;
-            worksheet.Cell($"B{i + 3}").Value = analyticPasserbyDetails[i].AnalyticPasserbyCount.New;
-            worksheet.Cell($"C{i + 3}").Value = analyticPasserbyDetails[i].AnalyticPasserbyCount.Low;
-            worksheet.Cell($"D{i + 3}").Value = analyticPasserbyDetails[i].AnalyticPasserbyCount.Frequent;
-            worksheet.Cell($"E{i + 3}").Value = analyticPasserbyDetails[i].AnalyticPasserbyCount.Total;*/
+            /*worksheet.Cell($"A{i + 3}").NeedUpdate = analyticPasserbyDetails[i].Date;
+            worksheet.Cell($"B{i + 3}").NeedUpdate = analyticPasserbyDetails[i].AnalyticPasserbyCount.New;
+            worksheet.Cell($"C{i + 3}").NeedUpdate = analyticPasserbyDetails[i].AnalyticPasserbyCount.Low;
+            worksheet.Cell($"D{i + 3}").NeedUpdate = analyticPasserbyDetails[i].AnalyticPasserbyCount.Frequent;
+            worksheet.Cell($"E{i + 3}").NeedUpdate = analyticPasserbyDetails[i].AnalyticPasserbyCount.Total;*/
         }
 
         var rangeTable = worksheet.Range($"A2:E{analyticPasserbyDetails.Count + 2}");
