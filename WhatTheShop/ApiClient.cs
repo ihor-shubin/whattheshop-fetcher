@@ -323,7 +323,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<CampaignCount>> GetCampaignCount(List<Zone> zones, List<CampaignList> campaignLists)
+    public async Task<List<CampaignCount>> GetCampaignCount(List<CampaignList> campaignLists)
     {
         var urlPart = "/1/media/campaign/count";
 
@@ -619,7 +619,7 @@ public class ApiClient
     public async Task<List<AnalyticVisitorDurationDetails>> GetAnalyticVisitorDurationDetails(string zoneId)
     {
         var urlPart = "/1/analytic/visitor/durationdetails";
-        zoneId = "10025";
+        
         var response = await _url.AppendPathSegment(urlPart)
             .WithTimeout(60 * 60) /* 1 hour */
             .WithHeader("wts_token", _token)
@@ -1091,7 +1091,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<AnalyticSystemLastUpdate?> GetAnalyticSystemLastUpdate(string zoneId)
+    public async Task<AnalyticSystemLastUpdate> GetAnalyticSystemLastUpdate(string zoneId)
     {
         var urlPart = "/1/analytic/system/lastupdate";
 
@@ -1191,7 +1191,7 @@ public class ApiClient
         return new AnalyticSystemTemporaryTable(zoneId, resultObj["context"]?.Value<string>(), resultObj["table"]?.Value<string>());
     }
 
-    public async Task<List<AnalyticRawPasserby>> GetAnalyticRawServicePasserby(string zoneId, List<Zone> zones)
+    public async Task<List<AnalyticRawPasserby>> GetAnalyticRawServicePasserby(string zoneId)
     {
         var urlPart = "/1/analytic/raw/passerby";
 
@@ -1221,5 +1221,372 @@ public class ApiClient
             x["dateStart"].Value<string>(),
             x["dateEnd"].Value<string>(),
             x["isLocal"].Value<string>())).ToList();
+    }
+
+    public async Task<List<AnalyticRawServiceVisitor>> GetAnalyticRawServiceVisitor(string zoneId)
+    {
+        var urlPart = "/1/analytic/raw/visitor";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].Values<JObject>();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticRawServiceVisitor>();
+        }
+
+        return resultObj.Select(x => new AnalyticRawServiceVisitor(
+            Guid.NewGuid(),
+            zoneId,
+            x["uid"].Value<string>(),
+            x["userMac"].Value<string>(),
+            x["dateStart"].Value<string>(),
+            x["dateEnd"].Value<string>(),
+            x["isLocal"].Value<string>(),
+            x["cntVisit"].Value<string>(),
+            x["zones"].Value<string>(),
+            x["deviceType"].Value<string>(),
+            x["frequency"].Value<string>(),
+            x["maxProximity"].Value<double>()
+        )).ToList();
+    }
+
+    public async Task<List<AnalyticRawServiceVisitorLight>> GetAnalyticRawServiceVisitorLight(string zoneId)
+    {
+        var urlPart = "/1/analytic/raw/visitorLight";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].Values<JObject>();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticRawServiceVisitorLight>();
+        }
+
+        return resultObj.Select(x => new AnalyticRawServiceVisitorLight(
+            Guid.NewGuid(),
+            zoneId,
+            x["uid"].Value<string>(),
+            x["dateDay"].Value<string>(),
+            x["dateStart"].Value<string>(),
+            x["dateEnd"].Value<string>()
+        )).ToList();
+    }
+
+    public async Task<List<AnalyticRawServiceVisitorMacList>> GetAnalyticRawServiceVisitorMacList(string zoneId)
+    {
+        var urlPart = "/1/analytic/raw/visitorMacList";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].Values<string>();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticRawServiceVisitorMacList>();
+        }
+
+        return resultObj.Select(x => new AnalyticRawServiceVisitorMacList(Guid.NewGuid(), zoneId, x)).ToList();
+    }
+
+    public async Task<List<AnalyticRawServicePasserbyMacList>> GetAnalyticRawServicePasserbyMacList(string zoneId)
+    {
+        var urlPart = "/1/analytic/raw/passerbyMacList";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].Values<string>();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticRawServicePasserbyMacList>();
+        }
+
+        return resultObj.Select(x => new AnalyticRawServicePasserbyMacList(Guid.NewGuid(), zoneId, x)).ToList();
+    }
+
+    public async Task<AnalyticVisitCount> GetAnalyticVisitCount(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/count";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .WithHeader("wts_token", _token)
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+
+        var result = new AnalyticVisitCount(zoneId, responseObj["result"]["total"].Value<int>());
+
+        return result;
+    }
+
+    public async Task<List<AnalyticVisitCountDetails>> GetAnalyticVisitCountDetails(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/countdetails";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":{""all"":[]}}")
+        {
+            return new List<AnalyticVisitCountDetails>();
+        }
+
+        var responseObj = JObject.Parse(response);
+
+        var resultAll = responseObj["result"]["all"]?.ToObject<Dictionary<string, int>>() ??
+                        new Dictionary<string, int>();
+
+        return resultAll.Select(x => x.Key)
+            .Distinct()
+            .Select(d => new AnalyticVisitCountDetails(Guid.NewGuid(), zoneId, d, resultAll[d]))
+            .ToList();
+    }
+
+    public async Task<List<AnalyticVisitCountHourDetails>> GetAnalyticVisitCountHourDetails(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/counthourdetails";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response is @"{""result"":[]}" or @"{""result"":{""all"":[]}}")
+        {
+            return new List<AnalyticVisitCountHourDetails>();
+        }
+
+        var responseObj = JObject.Parse(response);
+
+        var resultAll = responseObj["result"]["all"]?.ToObject<Dictionary<string, int>>() ?? new Dictionary<string, int>();
+
+        return resultAll.Select(x => x.Key)
+            .Distinct()
+            .Select(d => new AnalyticVisitCountHourDetails(Guid.NewGuid(), zoneId, d, resultAll[d]))
+            .ToList();
+    }
+
+    public async Task<List<AnalyticVisitDuration>> GetAnalyticVisitDuration(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/duration";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticVisitDuration>();
+        }
+
+        var responseObj = JObject.Parse(response);
+
+        var resultAll = responseObj["result"]?.ToObject<Dictionary<string, double>>() ??
+                        new Dictionary<string, double>();
+
+        return resultAll.Select(x => x.Key)
+            .Distinct()
+            .Select(d => new AnalyticVisitDuration(Guid.NewGuid(), zoneId, d, resultAll[d]))
+            .ToList();
+    }
+
+    public async Task<List<AnalyticVisitDurationDetails>> GetAnalyticVisitDurationDetails(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/durationdetails";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticVisitDurationDetails>();
+        }
+
+        var responseObj = JObject.Parse(response);
+
+        var resultAll = responseObj["result"]?.ToObject<Dictionary<string, JObject>>() ??
+                        new Dictionary<string, JObject>();
+
+        return resultAll.Select(x => x.Key)
+            .Distinct()
+            .Select(d => new AnalyticVisitDurationDetails(
+                Guid.NewGuid(),
+                zoneId,
+                d,
+                resultAll[d]["0"].Value<double>(),
+                resultAll[d]["300"].Value<double>(),
+                resultAll[d]["900"].Value<double>(),
+                resultAll[d]["1800"].Value<double>()))
+            .ToList();
+    }
+
+    public async Task<List<AnalyticVisitCountHour>> GetAnalyticVisitCountHour(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/counthour";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].ToObject<Dictionary<string, double>>();
+
+        var result = resultObj
+            .Select(x => new AnalyticVisitCountHour(
+                Guid.NewGuid(),
+                zoneId,
+                x.Key,
+                x.Value))
+            .ToList();
+
+        return result;
+    }
+
+    public async Task<List<AnalyticVisitCountHourDay>> GetAnalyticVisitCountHourDay(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/counthourday";
+
+        var result = new List<AnalyticVisitCountHourDay>();
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":[]}")
+        {
+            return result;
+        }
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].ToObject<Dictionary<string, JObject>>();
+
+        foreach (var hourObj in resultObj)
+        {
+            var dayObj = hourObj.Value.ToObject<Dictionary<string, int>>();
+            result.AddRange(dayObj.Select(d => new AnalyticVisitCountHourDay(
+                Guid.NewGuid(),
+                zoneId,
+                d.Key,
+                hourObj.Key,
+                d.Value
+            )));
+        }
+
+        return result;
+    }
+
+    public async Task<List<AnalyticVisitCountHourDayStart>> GetAnalyticVisitCountHourDayStart(string zoneId)
+    {
+        var urlPart = "/1/analytic/visit/counthourdaystart";
+
+        var response = await _url.AppendPathSegment(urlPart)
+            .WithTimeout(60 * 60) /* 1 hour */
+            .WithHeader("wts_token", _token)
+            .SetQueryParam("zones", $"[{zoneId}]")
+            .SetQueryParam("days", "[]")
+            .SetQueryParam("openingTimes", 0)
+            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .GetStringAsync();
+
+        if (response == @"{""result"":[]}")
+        {
+            return new List<AnalyticVisitCountHourDayStart>();
+        }
+
+        var responseObj = JObject.Parse(response);
+        var resultObj = responseObj["result"].ToObject<Dictionary<string, int>>();
+
+        var result = resultObj
+            .Select(x => new AnalyticVisitCountHourDayStart(
+                Guid.NewGuid(),
+                zoneId,
+                x.Key,
+                x.Value))
+            .ToList();
+
+        return result;
     }
 }

@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,7 +23,8 @@ public class AnalyticSensorService
 
     public async Task FetchAnalyticSensorCount()
     {
-        Console.WriteLine("Fetching /1/analytic/sensor/count...");
+        var apiName = "/1/analytic/sensor/count";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -48,6 +50,10 @@ public class AnalyticSensorService
                 result = await _worker.GetAnalyticSensorCount(zone.Id);
 
                 _db.AnalyticSensorCount.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -57,7 +63,8 @@ public class AnalyticSensorService
 
     public async Task FetchAnalyticSensorCountDetails()
     {
-        Console.WriteLine("Fetching /1/analytic/sensor/countdetails...");
+        var apiName = "/1/analytic/sensor/countdetails";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -83,6 +90,10 @@ public class AnalyticSensorService
                 result = await _worker.GetAnalyticSensorCountDetails(zone.Id);
 
                 _db.AnalyticSensorCountDetails.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -92,14 +103,19 @@ public class AnalyticSensorService
 
     public async Task FetchAnalyticSensorCountRaw()
     {
-        Console.WriteLine("Fetching  /1/analytic/sensor/countRaw...");
+        var apiName = " /1/analytic/sensor/countRaw...";
 
+        Console.WriteLine($"Fetching {0}...", apiName);
         // it requires sensor or hardware id. It's not available in the API
         var result = await _worker.GetAnalyticSensorCountRaw(string.Empty);
     }
 
     public async Task FetchAnalyticSensorCountDetailsRaw()
     {
+        var apiName = "tbd";
+        Console.WriteLine($"Fetching {0}...", apiName);
+
+        await _db.SaveChangesAsync();
         // it requires sensor or hardware id. It's not available in the API
     }
 }

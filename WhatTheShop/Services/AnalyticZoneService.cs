@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -20,10 +21,10 @@ public class AnalyticZoneService
         _zones = db.Zones.ToList();
     }
 
-
     public async Task FetchAnalyticZonesGeneral()
     {
-        Console.WriteLine("Fetching /1/analytic/zone/general...");
+        var apiName = "/1/analytic/zone/general";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -49,6 +50,10 @@ public class AnalyticZoneService
                 result = await _worker.GetAnalyticZonesGeneral(zone.Id);
 
                 _db.AnalyticZonesGeneral.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -58,7 +63,8 @@ public class AnalyticZoneService
 
     public async Task FetchAnalyticZonesVenn()
     {
-        Console.WriteLine("Fetching /1/analytic/zone/venn...");
+        var apiName = "/1/analytic/zone/venn";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -78,10 +84,13 @@ public class AnalyticZoneService
         else
         {
             Console.WriteLine("\tReading from API...");
-            Console.WriteLine("\tThis API requires to fetch the data for all the zones at once, so it will take long-long time...");
             result = await _worker.GetAnalyticZonesVenn(_zones);
 
             _db.AnalyticZonesVenn.AddRange(result);
+
+            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+            _db.AAStatus.Add(new Status(apiName, 100));
+
             await _db.SaveChangesAsync();
         }
 
@@ -90,7 +99,10 @@ public class AnalyticZoneService
 
     public async Task FetchAnalyticZonesSankey()
     {
-        Console.WriteLine("Fetching /1/analytic/zone/sankey...");
+        var apiName = "/1/analytic/zone/sankey";
+
+        Console.WriteLine($"Fetching {0}...", apiName);
+
 
         for (var i = 0; i < _zones.Count; i++)
         {
@@ -100,7 +112,7 @@ public class AnalyticZoneService
             var zone = _zones[i];
             Console.WriteLine("\tReading from API...");
             var result = await _worker.GetAnalyticZonesSankey(zone.Id);
-            
+
 
             Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
         }

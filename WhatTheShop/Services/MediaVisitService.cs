@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,7 +23,8 @@ public class MediaVisitService
 
     public async Task FetchMediaVisitCount()
     {
-        Console.WriteLine("Fetching /1/media/visit/count...");
+        var apiName = "/1/media/visit/count";
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -48,6 +50,9 @@ public class MediaVisitService
                 result = await _worker.GetMediaVisitCount(zone.Id);
 
                 _db.MediaVisitCount.Add(result);
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -57,7 +62,8 @@ public class MediaVisitService
 
     public async Task FetchMediaVisitCountDetails()
     {
-        Console.WriteLine("Fetching /1/media/visit/countdetails...");
+        var apiName = "/1/media/visit/countdetails";
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -83,6 +89,9 @@ public class MediaVisitService
                 result = await _worker.GetMediaVisitCountDetails(zone.Id);
 
                 _db.MediaVisitCountDetails.AddRange(result);
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 

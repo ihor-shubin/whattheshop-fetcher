@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,9 +24,15 @@ public class UserService
 
     public async Task FetchZones()
     {
-        Console.WriteLine("Fetching /1/user/zones...");
+        var apiName = "/1/user/zones";
+        Console.WriteLine("Fetching {0}...", apiName);
 
-        if (!_overwriteDb && _db.Zones.Any())
+        if (_overwriteDb)
+        {
+            await _db.Zones.ExecuteDeleteAsync();
+        }
+
+        if (_db.Zones.Any())
         {
             Console.WriteLine("\tReading from DB...");
             _zones = _db.Zones.ToList();
@@ -34,21 +42,32 @@ public class UserService
             Console.WriteLine("\tReading from API...");
             _zones = await _worker.GetZones();
 
-            await _db.Zones.ExecuteDeleteAsync();
             _db.Zones.AddRange(_zones);
+
+            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+            _db.AAStatus.Add(new Status(apiName, 100));
+
             await _db.SaveChangesAsync();
         }
     }
 
     public async Task FetchZoneInfos()
     {
-        Console.WriteLine("Fetching 1/user/zoneinfos...");
+        var apiName = "1/user/zoneinfos";
+
+        Console.WriteLine("Fetching {0}...", apiName);
+
         List<ZoneInfo> zoneInfos;
+
+        if (_overwriteDb)
+        {
+            await _db.ZonesInfos.ExecuteDeleteAsync();
+        }
 
         if (!_overwriteDb && _db.ZonesInfos.Any())
         {
             Console.WriteLine("\tReading fromDB...");
-            _db.ZonesInfos.ToList();
+            zoneInfos =  _db.ZonesInfos.ToList();
         }
         else
         {
@@ -57,16 +76,27 @@ public class UserService
 
             await _db.ZonesInfos.ExecuteDeleteAsync();
             _db.ZonesInfos.AddRange(zoneInfos);
+
+            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+            _db.AAStatus.Add(new Status(apiName, 100));
+
             await _db.SaveChangesAsync();
         }
     }
 
     public async Task FetchDevices()
     {
-        Console.WriteLine("Fetching /1/user/devices...");
+        var apiName = "/1/user/devices";
+
+        Console.WriteLine("Fetching {0}...", apiName);
         List<Device> devices;
 
-        if (!_overwriteDb && _db.Devices.Any())
+        if (_overwriteDb)
+        {
+            await _db.Devices.ExecuteDeleteAsync();
+        }
+
+        if (_db.Devices.Any())
         {
             Console.WriteLine("\tReading fromDB...");
             devices = _db.Devices.ToList();
@@ -78,16 +108,27 @@ public class UserService
 
             await _db.Devices.ExecuteDeleteAsync();
             _db.Devices.AddRange(devices);
+
+            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+            _db.AAStatus.Add(new Status(apiName, 100));
+
             await _db.SaveChangesAsync();
         }
     }
 
     public async Task FetchMonitoring()
     {
-        Console.WriteLine("Fetching /1/user/monitoring...");
+        var apiName = "/1/user/monitoring";
+        Console.WriteLine("Fetching {0}...", apiName);
+
         List<Monitoring> monitorings;
 
-        if (!_overwriteDb && _db.Monitorings.Any())
+        if (_overwriteDb)
+        {
+            await _db.Monitorings.ExecuteDeleteAsync();
+        }
+
+        if (_db.Monitorings.Any())
         {
             Console.WriteLine("\tReading fromDB...");
             monitorings = _db.Monitorings.ToList();
@@ -99,6 +140,10 @@ public class UserService
 
             await _db.Monitorings.ExecuteDeleteAsync();
             _db.Monitorings.AddRange(monitorings);
+            
+            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+            _db.AAStatus.Add(new Status(apiName, 100));
+
             await _db.SaveChangesAsync();
         }
     }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,7 +23,8 @@ public class AnalyticDeviceService
 
     public async Task FetchAnalyticDeviceCount()
     {
-        Console.WriteLine("Fetching /1/analytic/devices/count...");
+        var apiName = "/1/analytic/devices/count";
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -35,7 +37,7 @@ public class AnalyticDeviceService
             sw.Start();
 
             var zone = _zones[i];
-            AnalyticDeviceCount result;
+            AnalyticDeviceCount? result;
 
             if (!_overwriteDb && _db.AnalyticDeviceCount.Find(zone.Id) != null)
             {
@@ -48,6 +50,10 @@ public class AnalyticDeviceService
                 result = await _worker.GetAnalyticDeviceCount(zone.Id);
 
                 _db.AnalyticDeviceCount.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 

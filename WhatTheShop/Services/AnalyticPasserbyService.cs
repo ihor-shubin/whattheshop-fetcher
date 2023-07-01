@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,7 +23,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCount()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/count...");
+        var apiName = "/1/analytic/passerby/count";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -48,6 +50,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyCount(zone.Id);
 
                 _db.AnalyticPasserbyCounts.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -57,7 +63,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCountDetails()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/countdetails...");
+        var apiName = "/1/analytic/passerby/countdetails";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -83,6 +90,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyCountDetails(zone.Id);
 
                 _db.AnalyticPasserbyCountDetails.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -92,7 +103,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCountHour()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/counthour...");
+        var apiName = "/1/analytic/passerby/counthour";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -118,6 +130,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyHour(zone.Id);
 
                 _db.AnalyticPasserbyCountHours.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -127,7 +143,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCountDay()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/counthourday...");
+        var apiName = "/1/analytic/passerby/counthourday";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -153,7 +170,11 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyCountDay(zone.Id);
 
                 //db.AnalyticPasserbyCountDays.AddRange(result);
-                //await _db.SaveChangesAsync();
+                //
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
+                await _db.SaveChangesAsync();
             }
 
             Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
@@ -162,7 +183,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCountSum()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/countsum...");
+        var apiName = "/1/analytic/passerby/countsum";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -188,6 +210,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyCountSum(zone.Id);
 
                 _db.AnalyticPasserbyCountSums.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -197,7 +223,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyBestTimes()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/besttimes...");
+        var apiName = "/1/analytic/passerby/besttimes";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -223,6 +250,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyBestTimes(zone.Id);
 
                 _db.AnalyticPasserbyBestTimes.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -232,7 +263,8 @@ public class AnalyticPasserbyService
 
     public async Task FetchAnalyticPasserbyCountCommons()
     {
-        Console.WriteLine("Fetching /1/analytic/passerby/countcommon...");
+        var apiName = "/1/analytic/passerby/countcommon";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -258,6 +290,10 @@ public class AnalyticPasserbyService
                 result = await _worker.GetAnalyticPasserbyCountCommons(zone.Id);
 
                 _db.AnalyticPasserbyCountCommons.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 

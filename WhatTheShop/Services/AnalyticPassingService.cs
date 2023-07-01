@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
+using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -22,7 +23,8 @@ public class AnalyticPassingService
 
     public async Task FetchAnalyticPassingCount()
     {
-        Console.WriteLine("Fetching /1/analytic/passing/count...");
+        var apiName = "/1/analytic/passing/count";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -48,6 +50,10 @@ public class AnalyticPassingService
                 result = await _worker.GetAnalyticPassingCount(zone.Id);
 
                 _db.AnalyticPassingCounts.Add(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -57,7 +63,8 @@ public class AnalyticPassingService
 
     public async Task FetchAnalyticPassingCountDetails()
     {
-        Console.WriteLine("Fetching /1/analytic/passing/countdetails...");
+        var apiName = "/1/analytic/passing/countdetails";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -83,6 +90,10 @@ public class AnalyticPassingService
                 result = await _worker.GetAnalyticPassingCountDetails(zone.Id);
 
                 _db.AnalyticPassingCountDetails.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 
@@ -92,7 +103,8 @@ public class AnalyticPassingService
 
     public async Task FetchAnalyticPassingCountHourDetails()
     {
-        Console.WriteLine("Fetching /1/analytic/passing/counthourdetails...");
+        var apiName = "/1/analytic/passing/counthourdetails";
+        Console.WriteLine($"Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -118,6 +130,10 @@ public class AnalyticPassingService
                 result = await _worker.GetAnalyticPassingCountHourDetails(zone.Id);
 
                 _db.AnalyticPassingCountHourDetails.AddRange(result);
+
+                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
+                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
                 await _db.SaveChangesAsync();
             }
 

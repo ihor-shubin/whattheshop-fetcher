@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Net.NetworkInformation;
 using WhatTheShop.Models;
 
 namespace WhatTheShop.DB;
@@ -78,7 +79,33 @@ public class DbCtx: DbContext
     public DbSet<AnalyticSystemTemporaryTable> AnalyticSystemTemporaryTable { get; set; } = null!;
     
     public DbSet<AnalyticRawPasserby> AnalyticRawPasserby { get; set; } = null!;
+    
+    public DbSet<AnalyticRawServiceVisitor> AnalyticRawServiceVisitor { get; set; } = null!;
+    
+    public DbSet<AnalyticRawServiceVisitorLight> AnalyticRawServiceVisitorLight { get; set; } = null!;
+    
+    public DbSet<AnalyticRawServiceVisitorMacList> AnalyticRawServiceVisitorMacList { get; set; } = null!;
+    
+    public DbSet<AnalyticRawServicePasserbyMacList> AnalyticRawServicePasserbyMacList { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitCount> AnalyticVisitCount { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitCountDetails> AnalyticVisitCountDetails { get; set; } = null!;
+
+    public DbSet<AnalyticVisitCountHourDetails> AnalyticVisitCountHourDetails { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitDuration> AnalyticVisitDuration { get; set; } = null!;
+
+    public DbSet<AnalyticVisitDurationDetails> AnalyticVisitDurationDetails { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitCountHour> AnalyticVisitCountHour { get; set; } = null!;
+    
+    public DbSet<AnalyticVisitCountHourDay> AnalyticVisitCountHourDay { get; set; } = null!;
+
+    public DbSet<AnalyticVisitCountHourDayStart> AnalyticVisitCountHourDayStart { get; set; } = null!;
+    
+    public DbSet<Status> AAStatus { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={Path.Combine(Path.GetTempPath(), "WhatTheShop.sqlite")}");
+        => options.UseSqlite($"Data Source={Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WhatTheShop_dump.sqlite")}");
 }

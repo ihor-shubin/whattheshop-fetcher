@@ -80,3 +80,29 @@ public record AnalyticSystemForceRefresh([property: Key] string ZoneId, bool? Re
 public record AnalyticSystemTemporaryTable([property: Key] string ZoneId, string? Context, string? Table);
 
 public record AnalyticRawPasserby([property: Key] Guid Id, string ZoneId, string Uid, string UserMac, string DateStart, string DateEnd, string IsLocal);
+
+public record AnalyticRawServiceVisitor([property: Key] Guid Id, string ZoneId, string Uid, string UserMac, string DateStart, string DateEnd, string IsLocal, string CntVisit, string Zones, string DeviceType, string Frequency, double MaxProximity);
+
+public record AnalyticRawServiceVisitorLight([property: Key] Guid Id, string ZoneId, string Uid, string DateDay, string DateStart, string DateEnd);
+
+public record AnalyticRawServiceVisitorMacList([property: Key] Guid Id, string ZoneId, string UserMac);
+
+public record AnalyticRawServicePasserbyMacList([property: Key] Guid Id, string ZoneId, string UserMac);
+
+public record AnalyticVisitCount([property: Key] string ZoneId, int Total);
+
+public record AnalyticVisitCountDetails([property: Key] Guid Id, string ZoneId, string Date, int All);
+
+public record AnalyticVisitCountHourDetails([property: Key] Guid Id, string ZoneId, string Hour, int All);
+
+public record AnalyticVisitDuration([property: Key] Guid Id, string ZoneId, string Date, double Duration);
+
+public record AnalyticVisitDurationDetails([property: Key] Guid Id, string ZoneId, string Date, double Duration0, double Duration300, double Duration900, double Duration1800);
+
+public record AnalyticVisitCountHour([property: Key] Guid Id, string ZoneId, string Hour, double Count);
+
+public record AnalyticVisitCountHourDay([property: Key] Guid Id, string ZoneId, string Day, string Hour, int Count);
+
+public record AnalyticVisitCountHourDayStart([property: Key] Guid Id, string ZoneId, string Date, int Count);
+
+public record Status([property: Key]string Name, double SyncProgressPercent);

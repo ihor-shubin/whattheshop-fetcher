@@ -11,8 +11,8 @@ using WhatTheShop.DB;
 namespace WhatTheShop.Migrations
 {
     [DbContext(typeof(DbCtx))]
-    [Migration("20230630044031_AddTables")]
-    partial class AddTables
+    [Migration("20230630183854_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,6 +290,129 @@ namespace WhatTheShop.Migrations
                     b.ToTable("AnalyticRawPasserby");
                 });
 
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticRawServicePasserbyMacList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserMac")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticRawServicePasserbyMacList");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticRawServiceVisitor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CntVisit")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateEnd")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateStart")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeviceType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Frequency")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IsLocal")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("MaxProximity")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserMac")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Zones")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticRawServiceVisitor");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticRawServiceVisitorLight", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateDay")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateEnd")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DateStart")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticRawServiceVisitorLight");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticRawServiceVisitorMacList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserMac")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticRawServiceVisitorMacList");
+                });
+
             modelBuilder.Entity("WhatTheShop.Models.AnalyticSensorCount", b =>
                 {
                     b.Property<string>("ZoneId")
@@ -410,6 +533,186 @@ namespace WhatTheShop.Migrations
                     b.HasKey("ZoneId");
 
                     b.ToTable("AnalyticSystemTemporaryTable");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCount", b =>
+                {
+                    b.Property<string>("ZoneId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ZoneId");
+
+                    b.ToTable("AnalyticVisitCount");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCountDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("All")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitCountDetails");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCountHour", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Count")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Hour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitCountHour");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCountHourDay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Day")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Hour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitCountHourDay");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCountHourDayStart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitCountHourDayStart");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitCountHourDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("All")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Hour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitCountHourDetails");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitDuration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Duration")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitDuration");
+                });
+
+            modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitDurationDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Duration0")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Duration1800")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Duration300")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Duration900")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnalyticVisitDurationDetails");
                 });
 
             modelBuilder.Entity("WhatTheShop.Models.AnalyticVisitorBestTimes", b =>

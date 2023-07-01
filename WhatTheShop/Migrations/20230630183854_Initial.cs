@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WhatTheShop.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTables : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -184,6 +184,70 @@ namespace WhatTheShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AnalyticRawServicePasserbyMacList",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserMac = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticRawServicePasserbyMacList", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticRawServiceVisitor",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Uid = table.Column<string>(type: "TEXT", nullable: false),
+                    UserMac = table.Column<string>(type: "TEXT", nullable: false),
+                    DateStart = table.Column<string>(type: "TEXT", nullable: false),
+                    DateEnd = table.Column<string>(type: "TEXT", nullable: false),
+                    IsLocal = table.Column<string>(type: "TEXT", nullable: false),
+                    CntVisit = table.Column<string>(type: "TEXT", nullable: false),
+                    Zones = table.Column<string>(type: "TEXT", nullable: false),
+                    DeviceType = table.Column<string>(type: "TEXT", nullable: false),
+                    Frequency = table.Column<string>(type: "TEXT", nullable: false),
+                    MaxProximity = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticRawServiceVisitor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticRawServiceVisitorLight",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Uid = table.Column<string>(type: "TEXT", nullable: false),
+                    DateDay = table.Column<string>(type: "TEXT", nullable: false),
+                    DateStart = table.Column<string>(type: "TEXT", nullable: false),
+                    DateEnd = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticRawServiceVisitorLight", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticRawServiceVisitorMacList",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserMac = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticRawServiceVisitorMacList", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnalyticSensorCount",
                 columns: table => new
                 {
@@ -266,6 +330,120 @@ namespace WhatTheShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AnalyticSystemTemporaryTable", x => x.ZoneId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCount",
+                columns: table => new
+                {
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Total = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCount", x => x.ZoneId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCountDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Date = table.Column<string>(type: "TEXT", nullable: false),
+                    All = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCountDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCountHour",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Hour = table.Column<string>(type: "TEXT", nullable: false),
+                    Count = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCountHour", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCountHourDay",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Day = table.Column<string>(type: "TEXT", nullable: false),
+                    Hour = table.Column<string>(type: "TEXT", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCountHourDay", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCountHourDayStart",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Date = table.Column<string>(type: "TEXT", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCountHourDayStart", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitCountHourDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Hour = table.Column<string>(type: "TEXT", nullable: false),
+                    All = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitCountHourDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitDuration",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Date = table.Column<string>(type: "TEXT", nullable: false),
+                    Duration = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitDuration", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalyticVisitDurationDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ZoneId = table.Column<string>(type: "TEXT", nullable: false),
+                    Date = table.Column<string>(type: "TEXT", nullable: false),
+                    Duration0 = table.Column<double>(type: "REAL", nullable: false),
+                    Duration300 = table.Column<double>(type: "REAL", nullable: false),
+                    Duration900 = table.Column<double>(type: "REAL", nullable: false),
+                    Duration1800 = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalyticVisitDurationDetails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -593,6 +771,18 @@ namespace WhatTheShop.Migrations
                 name: "AnalyticRawPasserby");
 
             migrationBuilder.DropTable(
+                name: "AnalyticRawServicePasserbyMacList");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticRawServiceVisitor");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticRawServiceVisitorLight");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticRawServiceVisitorMacList");
+
+            migrationBuilder.DropTable(
                 name: "AnalyticSensorCount");
 
             migrationBuilder.DropTable(
@@ -609,6 +799,30 @@ namespace WhatTheShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "AnalyticSystemTemporaryTable");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCount");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCountDetails");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCountHour");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCountHourDay");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCountHourDayStart");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitCountHourDetails");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitDuration");
+
+            migrationBuilder.DropTable(
+                name: "AnalyticVisitDurationDetails");
 
             migrationBuilder.DropTable(
                 name: "AnalyticVisitorBestTimes");
