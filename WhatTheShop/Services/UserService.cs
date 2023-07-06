@@ -1,19 +1,18 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class UserService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private List<Zone> _zones = new();
 
-    public UserService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public UserService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -44,8 +43,6 @@ public class UserService
 
             _db.Zones.AddRange(_zones);
 
-            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-            _db.AAStatus.Add(new Status(apiName, 100));
 
             await _db.SaveChangesAsync();
         }
@@ -67,7 +64,7 @@ public class UserService
         if (!_overwriteDb && _db.ZonesInfos.Any())
         {
             Console.WriteLine("\tReading fromDB...");
-            zoneInfos =  _db.ZonesInfos.ToList();
+            zoneInfos = _db.ZonesInfos.ToList();
         }
         else
         {
@@ -77,8 +74,6 @@ public class UserService
             await _db.ZonesInfos.ExecuteDeleteAsync();
             _db.ZonesInfos.AddRange(zoneInfos);
 
-            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-            _db.AAStatus.Add(new Status(apiName, 100));
 
             await _db.SaveChangesAsync();
         }
@@ -109,8 +104,6 @@ public class UserService
             await _db.Devices.ExecuteDeleteAsync();
             _db.Devices.AddRange(devices);
 
-            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-            _db.AAStatus.Add(new Status(apiName, 100));
 
             await _db.SaveChangesAsync();
         }
@@ -140,9 +133,7 @@ public class UserService
 
             await _db.Monitorings.ExecuteDeleteAsync();
             _db.Monitorings.AddRange(monitorings);
-            
-            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-            _db.AAStatus.Add(new Status(apiName, 100));
+
 
             await _db.SaveChangesAsync();
         }

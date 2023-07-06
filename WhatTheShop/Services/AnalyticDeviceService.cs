@@ -1,19 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class AnalyticDeviceService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public AnalyticDeviceService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticDeviceService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -51,8 +51,6 @@ public class AnalyticDeviceService
 
                 _db.AnalyticDeviceCount.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }

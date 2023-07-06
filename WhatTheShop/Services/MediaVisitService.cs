@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class MediaVisitService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public MediaVisitService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public MediaVisitService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -50,8 +50,7 @@ public class MediaVisitService
                 result = await _worker.GetMediaVisitCount(zone.Id);
 
                 _db.MediaVisitCount.Add(result);
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
 
                 await _db.SaveChangesAsync();
             }
@@ -89,8 +88,7 @@ public class MediaVisitService
                 result = await _worker.GetMediaVisitCountDetails(zone.Id);
 
                 _db.MediaVisitCountDetails.AddRange(result);
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
+
 
                 await _db.SaveChangesAsync();
             }

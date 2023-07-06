@@ -1,13 +1,11 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Text;
 using WhatTheShop.Models;
 
-namespace WhatTheShop;
+namespace WhatTheShop.ApiClient;
 
-public class ApiClient
+public class WhatTheShopApiClient
 {
     /*
      https://api.whattheshop.net/doc/1/index.html
@@ -19,17 +17,15 @@ public class ApiClient
 
     private readonly string _token;
 
-    public ApiClient()
+    public WhatTheShopApiClient(string url, string userName, string password)
     {
-        _url = "https://api.whattheshop.net";
-
-        _userName = Environment.GetEnvironmentVariable("whattheshop_UserName", EnvironmentVariableTarget.User)!;
-        _userPassword = Environment.GetEnvironmentVariable("whattheshop_Password", EnvironmentVariableTarget.User)!;
-
         //_startDateParam = DateTime.Now.AddYears(-2).AddDays(1); // the only 2 last years available
         _startDateParam = DateTime.Now.AddMonths(0).AddDays(-2); // the only 2 last years available
 
-        _token = this.GetToken().GetAwaiter().GetResult();
+        _url = url;
+        _userName = userName;
+        _userPassword = password;
+        _token = GetToken().GetAwaiter().GetResult();
     }
 
     public async Task<string> GetToken()
@@ -155,7 +151,7 @@ public class ApiClient
     /// <summary>
     /// Very slow!
     /// </summary>
-    public async Task<AnalyticPasserbyCount> GetAnalyticPasserbyCount(string zoneId)
+    public async Task<AnalyticPasserbyCount> GetAnalyticPasserbyCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/count";
 
@@ -181,7 +177,7 @@ public class ApiClient
         );
     }
 
-    public async Task<List<AnalyticPasserbyCountDetails>> GetAnalyticPasserbyCountDetails(string zoneId)
+    public async Task<List<AnalyticPasserbyCountDetails>> GetAnalyticPasserbyCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/countdetails";
 
@@ -227,7 +223,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticPasserbyCountHour>> GetAnalyticPasserbyHour(string zoneId)
+    public async Task<List<AnalyticPasserbyCountHour>> GetAnalyticPasserbyHour(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/counthour";
 
@@ -255,7 +251,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<AnalyticSensorCount> GetAnalyticSensorCount(string zoneId)
+    public async Task<AnalyticSensorCount> GetAnalyticSensorCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/sensor/count";
 
@@ -278,14 +274,14 @@ public class ApiClient
             resultObj["absolute"]?.Value<int>("NeedUpdate"));
     }
 
-    public async Task<AnalyticPassingCount> GetAnalyticPassingCount(string zoneId)
+    public async Task<AnalyticPassingCount> GetAnalyticPassingCount(string zoneId, DateTime startDate, DateTime endDate)
     {
         var urlPart = "/1/analytic/passing/count";
 
         var response = await _url.AppendPathSegment(urlPart)
             .WithTimeout(60 * 60) /* 1 hour */
-            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
-            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("startDate", startDate)
+            .SetQueryParam("endDate", endDate)
             .SetQueryParam("zones", $"[{zoneId}]")
             .SetQueryParam("days", "[]")
             .SetQueryParam("openingTimes", 0)
@@ -360,7 +356,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticPasserbyCountDay>> GetAnalyticPasserbyCountDay(string zoneId)
+    public async Task<List<AnalyticPasserbyCountDay>> GetAnalyticPasserbyCountDay(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/counthourday";
 
@@ -380,7 +376,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<List<AnalyticPasserbyCountSum>> GetAnalyticPasserbyCountSum(string zoneId)
+    public async Task<List<AnalyticPasserbyCountSum>> GetAnalyticPasserbyCountSum(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/countsum";
 
@@ -402,7 +398,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<AnalyticPasserbyBestTimes> GetAnalyticPasserbyBestTimes(string zoneId)
+    public async Task<AnalyticPasserbyBestTimes> GetAnalyticPasserbyBestTimes(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/besttimes";
 
@@ -433,7 +429,7 @@ public class ApiClient
             resultObj["peak"]["endTime"].Value<string>());
     }
 
-    public async Task<AnalyticPasserbyCountCommon> GetAnalyticPasserbyCountCommons(string zoneId)
+    public async Task<AnalyticPasserbyCountCommon> GetAnalyticPasserbyCountCommons(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/countcommon";
 
@@ -454,7 +450,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<List<AnalyticPassingCountDetails>> GetAnalyticPassingCountDetails(string zoneId)
+    public async Task<List<AnalyticPassingCountDetails>> GetAnalyticPassingCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/countdetails";
 
@@ -484,7 +480,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticPassingCountHourDetails>> GetAnalyticPassingCountHourDetails(string zoneId)
+    public async Task<List<AnalyticPassingCountHourDetails>> GetAnalyticPassingCountHourDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passing/counthourdetails";
 
@@ -514,7 +510,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<AnalyticVisitorCount> GetAnalyticVisitorCount(string zoneId)
+    public async Task<AnalyticVisitorCount> GetAnalyticVisitorCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/passerby/count";
 
@@ -540,7 +536,7 @@ public class ApiClient
         );
     }
 
-    public async Task<List<AnalyticVisitorCountDetails>> GetAnalyticVisitorCountDetails(string zoneId)
+    public async Task<List<AnalyticVisitorCountDetails>> GetAnalyticVisitorCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/countdetails";
 
@@ -586,7 +582,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitorDuration>> GetAnalyticVisitorDurations(string zoneId)
+    public async Task<List<AnalyticVisitorDuration>> GetAnalyticVisitorDurations(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/duration";
 
@@ -616,10 +612,10 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitorDurationDetails>> GetAnalyticVisitorDurationDetails(string zoneId)
+    public async Task<List<AnalyticVisitorDurationDetails>> GetAnalyticVisitorDurationDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/durationdetails";
-        
+
         var response = await _url.AppendPathSegment(urlPart)
             .WithTimeout(60 * 60) /* 1 hour */
             .WithHeader("wts_token", _token)
@@ -653,7 +649,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<AnalyticVisitorBestTimes> GetAnalyticVisitorBestTimes(string zoneId)
+    public async Task<AnalyticVisitorBestTimes> GetAnalyticVisitorBestTimes(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/besttimes";
 
@@ -684,7 +680,7 @@ public class ApiClient
             resultObj["peak"]["endTime"].Value<string>());
     }
 
-    public async Task<List<AnalyticVisitorCountHour>> GetVisitorPasserbyHour(string zoneId)
+    public async Task<List<AnalyticVisitorCountHour>> GetVisitorPasserbyHour(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/counthour";
 
@@ -712,7 +708,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitorCountHourDay>> GetAnalyticVisitorCountHourDay(string zoneId)
+    public async Task<List<AnalyticVisitorCountHourDay>> GetAnalyticVisitorCountHourDay(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/counthourday";
         var result = new List<AnalyticVisitorCountHourDay>();
@@ -750,7 +746,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitorCountHourDayDetails>> GetAnalyticVisitorCountHourDayDetails(string zoneId)
+    public async Task<List<AnalyticVisitorCountHourDayDetails>> GetAnalyticVisitorCountHourDayDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/counthourdetails";
 
@@ -783,7 +779,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitorCountHourDayStart>> GetAnalyticVisitorCountHourDayStart(string zoneId)
+    public async Task<List<AnalyticVisitorCountHourDayStart>> GetAnalyticVisitorCountHourDayStart(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/counthourdaystart";
 
@@ -816,7 +812,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitorCountSum>> GetAnalyticVisitorCountSum(string zoneId)
+    public async Task<List<AnalyticVisitorCountSum>> GetAnalyticVisitorCountSum(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/countsum";
 
@@ -849,7 +845,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<AnalyticVisitorCountCommon> GetAnalyticVisitorCountCommon(string zoneId)
+    public async Task<AnalyticVisitorCountCommon> GetAnalyticVisitorCountCommon(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visitor/countcommon";
 
@@ -876,7 +872,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<AnalyticDeviceCount> GetAnalyticDeviceCount(string zoneId)
+    public async Task<AnalyticDeviceCount> GetAnalyticDeviceCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/devices/count";
 
@@ -904,7 +900,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<AnalyticZonesGeneral> GetAnalyticZonesGeneral(string zoneId)
+    public async Task<AnalyticZonesGeneral> GetAnalyticZonesGeneral(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/zone/general";
 
@@ -956,7 +952,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<object> GetAnalyticZonesSankey(string zoneId)
+    public async Task<object> GetAnalyticZonesSankey(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/zone/sankey";
 
@@ -976,7 +972,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<MediaVisitCount> GetMediaVisitCount(string zoneId)
+    public async Task<MediaVisitCount> GetMediaVisitCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/media/visit/count";
 
@@ -994,7 +990,7 @@ public class ApiClient
         return new MediaVisitCount(zoneId, resultObj.Value<int>("facebook"), resultObj.Value<int>("google"), resultObj.Value<int>("teemo"));
     }
 
-    public async Task<List<MediaVisitCountDetails>> GetMediaVisitCountDetails(string zoneId)
+    public async Task<List<MediaVisitCountDetails>> GetMediaVisitCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/media/visit/countdetails";
 
@@ -1036,7 +1032,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticSensorCountDetails>> GetAnalyticSensorCountDetails(string zoneId)
+    public async Task<List<AnalyticSensorCountDetails>> GetAnalyticSensorCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/sensor/countdetails";
 
@@ -1091,7 +1087,7 @@ public class ApiClient
         return null;
     }
 
-    public async Task<AnalyticSystemLastUpdate> GetAnalyticSystemLastUpdate(string zoneId)
+    public async Task<AnalyticSystemLastUpdate> GetAnalyticSystemLastUpdate(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/system/lastupdate";
 
@@ -1116,7 +1112,7 @@ public class ApiClient
         return new AnalyticSystemLastUpdate(zoneId, resultObj.Value<string>("date"), resultObj["needUpdate"]?.Value<bool>());
     }
 
-    public async Task<AnalyticSystemQuickLastUpdate> GetAnalyticSystemQuickLastUpdate(string zoneId)
+    public async Task<AnalyticSystemQuickLastUpdate> GetAnalyticSystemQuickLastUpdate(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/system/lastupdate";
 
@@ -1141,7 +1137,7 @@ public class ApiClient
         return new AnalyticSystemQuickLastUpdate(zoneId, resultObj.Value<string>("date"), resultObj["needUpdate"]?.Value<bool>());
     }
 
-    public async Task<AnalyticSystemForceRefresh> GetAnalyticSystemForceRefresh(string zoneId)
+    public async Task<AnalyticSystemForceRefresh> GetAnalyticSystemForceRefresh(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/system/forceRefresh";
 
@@ -1166,7 +1162,7 @@ public class ApiClient
         return new AnalyticSystemForceRefresh(zoneId, resultObj.Value<bool>());
     }
 
-    public async Task<AnalyticSystemTemporaryTable> GetAnalyticSystemTemporaryTable(string zoneId)
+    public async Task<AnalyticSystemTemporaryTable> GetAnalyticSystemTemporaryTable(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/system/temporaryTable";
 
@@ -1191,7 +1187,7 @@ public class ApiClient
         return new AnalyticSystemTemporaryTable(zoneId, resultObj["context"]?.Value<string>(), resultObj["table"]?.Value<string>());
     }
 
-    public async Task<List<AnalyticRawPasserby>> GetAnalyticRawServicePasserby(string zoneId)
+    public async Task<List<AnalyticRawPasserby>> GetAnalyticRawServicePasserby(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/raw/passerby";
 
@@ -1201,8 +1197,8 @@ public class ApiClient
             .SetQueryParam("zones", $"[{zoneId}]")
             .SetQueryParam("days", "[]")
             .SetQueryParam("openingTimes", 0)
-            .SetQueryParam("startDate", _startDateParam.ToString("yyyy-MM-dd hh:mm:ss"))
-            .SetQueryParam("endDate", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("startDate", start.ToString("yyyy-MM-dd hh:mm:ss"))
+            .SetQueryParam("endDate", end.ToString("yyyy-MM-dd hh:mm:ss"))
             .GetStringAsync();
 
         var responseObj = JObject.Parse(response);
@@ -1223,7 +1219,7 @@ public class ApiClient
             x["isLocal"].Value<string>())).ToList();
     }
 
-    public async Task<List<AnalyticRawServiceVisitor>> GetAnalyticRawServiceVisitor(string zoneId)
+    public async Task<List<AnalyticRawServiceVisitor>> GetAnalyticRawServiceVisitor(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/raw/visitor";
 
@@ -1261,7 +1257,7 @@ public class ApiClient
         )).ToList();
     }
 
-    public async Task<List<AnalyticRawServiceVisitorLight>> GetAnalyticRawServiceVisitorLight(string zoneId)
+    public async Task<List<AnalyticRawServiceVisitorLight>> GetAnalyticRawServiceVisitorLight(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/raw/visitorLight";
 
@@ -1293,7 +1289,7 @@ public class ApiClient
         )).ToList();
     }
 
-    public async Task<List<AnalyticRawServiceVisitorMacList>> GetAnalyticRawServiceVisitorMacList(string zoneId)
+    public async Task<List<AnalyticRawServiceVisitorMacList>> GetAnalyticRawServiceVisitorMacList(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/raw/visitorMacList";
 
@@ -1318,7 +1314,7 @@ public class ApiClient
         return resultObj.Select(x => new AnalyticRawServiceVisitorMacList(Guid.NewGuid(), zoneId, x)).ToList();
     }
 
-    public async Task<List<AnalyticRawServicePasserbyMacList>> GetAnalyticRawServicePasserbyMacList(string zoneId)
+    public async Task<List<AnalyticRawServicePasserbyMacList>> GetAnalyticRawServicePasserbyMacList(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/raw/passerbyMacList";
 
@@ -1343,7 +1339,7 @@ public class ApiClient
         return resultObj.Select(x => new AnalyticRawServicePasserbyMacList(Guid.NewGuid(), zoneId, x)).ToList();
     }
 
-    public async Task<AnalyticVisitCount> GetAnalyticVisitCount(string zoneId)
+    public async Task<AnalyticVisitCount> GetAnalyticVisitCount(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/count";
 
@@ -1364,7 +1360,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitCountDetails>> GetAnalyticVisitCountDetails(string zoneId)
+    public async Task<List<AnalyticVisitCountDetails>> GetAnalyticVisitCountDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/countdetails";
 
@@ -1394,7 +1390,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitCountHourDetails>> GetAnalyticVisitCountHourDetails(string zoneId)
+    public async Task<List<AnalyticVisitCountHourDetails>> GetAnalyticVisitCountHourDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/counthourdetails";
 
@@ -1423,7 +1419,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitDuration>> GetAnalyticVisitDuration(string zoneId)
+    public async Task<List<AnalyticVisitDuration>> GetAnalyticVisitDuration(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/duration";
 
@@ -1453,7 +1449,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitDurationDetails>> GetAnalyticVisitDurationDetails(string zoneId)
+    public async Task<List<AnalyticVisitDurationDetails>> GetAnalyticVisitDurationDetails(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/durationdetails";
 
@@ -1490,7 +1486,7 @@ public class ApiClient
             .ToList();
     }
 
-    public async Task<List<AnalyticVisitCountHour>> GetAnalyticVisitCountHour(string zoneId)
+    public async Task<List<AnalyticVisitCountHour>> GetAnalyticVisitCountHour(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/counthour";
 
@@ -1518,7 +1514,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitCountHourDay>> GetAnalyticVisitCountHourDay(string zoneId)
+    public async Task<List<AnalyticVisitCountHourDay>> GetAnalyticVisitCountHourDay(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/counthourday";
 
@@ -1557,7 +1553,7 @@ public class ApiClient
         return result;
     }
 
-    public async Task<List<AnalyticVisitCountHourDayStart>> GetAnalyticVisitCountHourDayStart(string zoneId)
+    public async Task<List<AnalyticVisitCountHourDayStart>> GetAnalyticVisitCountHourDayStart(string zoneId, DateTime start, DateTime end)
     {
         var urlPart = "/1/analytic/visit/counthourdaystart";
 

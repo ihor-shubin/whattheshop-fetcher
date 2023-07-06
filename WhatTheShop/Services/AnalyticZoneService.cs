@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class AnalyticZoneService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public AnalyticZoneService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticZoneService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -24,7 +24,7 @@ public class AnalyticZoneService
     public async Task FetchAnalyticZonesGeneral()
     {
         var apiName = "/1/analytic/zone/general";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -51,8 +51,6 @@ public class AnalyticZoneService
 
                 _db.AnalyticZonesGeneral.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -64,7 +62,7 @@ public class AnalyticZoneService
     public async Task FetchAnalyticZonesVenn()
     {
         var apiName = "/1/analytic/zone/venn";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -88,8 +86,6 @@ public class AnalyticZoneService
 
             _db.AnalyticZonesVenn.AddRange(result);
 
-            _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-            _db.AAStatus.Add(new Status(apiName, 100));
 
             await _db.SaveChangesAsync();
         }
@@ -97,11 +93,12 @@ public class AnalyticZoneService
         Console.WriteLine($"\tProcessed in {sw.Elapsed}");
     }
 
+    // always empty, need work
     public async Task FetchAnalyticZonesSankey()
     {
         var apiName = "/1/analytic/zone/sankey";
 
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
 
         for (var i = 0; i < _zones.Count; i++)

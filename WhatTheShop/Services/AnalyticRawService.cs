@@ -1,223 +1,60 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Hangfire.Server;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
-using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
-public class AnalyticRawService
+public class AnalyticRawService : BaseService
 {
-    private readonly ApiClient _worker;
-    private readonly DbCtx _db;
-    private readonly bool _overwriteDb;
-    private readonly List<Zone> _zones;
+    private readonly WhatTheShopApiClient _worker;
 
-    public AnalyticRawService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticRawService(WhatTheShopApiClient worker, DbCtx db) : base(db)
     {
         _worker = worker;
-        _db = db;
-        _overwriteDb = overwriteDb;
-        _zones = db.Zones.ToList();
     }
 
-    public async Task FetchAnalyticRawServicePasserby()
+    public async Task FetchAnalyticRawPasserbyService(DateTime start, DateTime end, PerformContext context)
     {
         var apiName = "/1/analytic/raw/passerby";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        var dataFetcher = _worker.GetAnalyticRawServicePasserby;
+        var dbEntities = Db.AnalyticRawPasserby;
 
-        if (_overwriteDb)
-        {
-            await _db.AnalyticRawPasserby.ExecuteDeleteAsync();
-        }
-
-        for (var i = 0; i < _zones.Count; i++)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var zone = _zones[i];
-            List<AnalyticRawPasserby> result;
-
-            if (!_overwriteDb && _db.AnalyticRawPasserby.Any(x => x.ZoneId == zone.Id))
-            {
-                Console.WriteLine("\tReading from DB...");
-                result = _db.AnalyticRawPasserby.Where(x => x.ZoneId == zone.Id).ToList();
-            }
-            else
-            {
-                Console.WriteLine("\tReading from API...");
-                result = await _worker.GetAnalyticRawServicePasserby(zone.Id);
-
-                _db.AnalyticRawPasserby.AddRange(result);
-
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
-
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
-        }
+        await RunForMultiResponse(start, end, context, apiName, dbEntities, dataFetcher);
     }
-
-    public async Task FetchAnalyticRawServiceVisitor()
+    
+    public async Task FetchAnalyticRawServiceVisitor(DateTime start, DateTime end, PerformContext context)
     {
         var apiName = "/1/analytic/raw/visitor";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        var dataFetcher = _worker.GetAnalyticRawServiceVisitor;
+        var dbEntities = Db.AnalyticRawServiceVisitor;
 
-        if (_overwriteDb)
-        {
-            await _db.AnalyticRawServiceVisitor.ExecuteDeleteAsync();
-        }
-
-        for (var i = 0; i < _zones.Count; i++)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var zone = _zones[i];
-            List<AnalyticRawServiceVisitor> result;
-
-            if (!_overwriteDb && _db.AnalyticRawServiceVisitor.Any(x => x.ZoneId == zone.Id))
-            {
-                Console.WriteLine("\tReading from DB...");
-                result = _db.AnalyticRawServiceVisitor.Where(x => x.ZoneId == zone.Id).ToList();
-            }
-            else
-            {
-                Console.WriteLine("\tReading from API...");
-                result = await _worker.GetAnalyticRawServiceVisitor(zone.Id);
-
-                _db.AnalyticRawServiceVisitor.AddRange(result);
-
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
-
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
-        }
+        await RunForMultiResponse(start, end, context, apiName, dbEntities, dataFetcher);
     }
 
-    public async Task FetchAnalyticRawServiceVisitorLight()
+    public async Task FetchAnalyticRawServiceVisitorLight(DateTime start, DateTime end, PerformContext context)
     {
         var apiName = "/1/analytic/raw/visitorLight";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        var dataFetcher = _worker.GetAnalyticRawServiceVisitorLight;
+        var dbEntities = Db.AnalyticRawServiceVisitorLight;
 
-        if (_overwriteDb)
-        {
-            await _db.AnalyticRawServiceVisitorLight.ExecuteDeleteAsync();
-        }
-
-        for (var i = 0; i < _zones.Count; i++)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var zone = _zones[i];
-            List<AnalyticRawServiceVisitorLight> result;
-
-            if (!_overwriteDb && _db.AnalyticRawServiceVisitorLight.Any(x => x.ZoneId == zone.Id))
-            {
-                Console.WriteLine("\tReading from DB...");
-                result = _db.AnalyticRawServiceVisitorLight.Where(x => x.ZoneId == zone.Id).ToList();
-            }
-            else
-            {
-                Console.WriteLine("\tReading from API...");
-                result = await _worker.GetAnalyticRawServiceVisitorLight(zone.Id);
-
-                _db.AnalyticRawServiceVisitorLight.AddRange(result);
-
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
-
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
-        }
+        await RunForMultiResponse(start, end, context, apiName, dbEntities, dataFetcher);
     }
 
-    public async Task FetchAnalyticRawServiceVisitorMacList()
+    public async Task FetchAnalyticRawServiceVisitorMacList(DateTime start, DateTime end, PerformContext context)
     {
         var apiName = "/1/analytic/raw/visitorMacList";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        var dataFetcher = _worker.GetAnalyticRawServiceVisitorMacList;
+        var dbEntities = Db.AnalyticRawServiceVisitorMacList;
 
-        if (_overwriteDb)
-        {
-            await _db.AnalyticRawServiceVisitorMacList.ExecuteDeleteAsync();
-        }
-
-        for (var i = 0; i < _zones.Count; i++)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var zone = _zones[i];
-            List<AnalyticRawServiceVisitorMacList> result;
-
-            if (!_overwriteDb && _db.AnalyticRawServiceVisitorMacList.Any(x => x.ZoneId == zone.Id))
-            {
-                Console.WriteLine("\tReading from DB...");
-                result = _db.AnalyticRawServiceVisitorMacList.Where(x => x.ZoneId == zone.Id).ToList();
-            }
-            else
-            {
-                Console.WriteLine("\tReading from API...");
-                result = await _worker.GetAnalyticRawServiceVisitorMacList(zone.Id);
-
-                _db.AnalyticRawServiceVisitorMacList.AddRange(result);
-
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
-
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
-        }
+        await RunForMultiResponse(start, end, context, apiName, dbEntities, dataFetcher);
     }
 
-    public async Task FetchAnalyticRawServicePasserbyMacList()
+    public async Task FetchAnalyticRawServicePasserbyMacList(DateTime start, DateTime end, PerformContext context)
     {
         var apiName = "/1/analytic/raw/passerbyMacList";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        var dataFetcher = _worker.GetAnalyticRawServicePasserbyMacList;
+        var dbEntities = Db.AnalyticRawServicePasserbyMacList;
 
-        if (_overwriteDb)
-        {
-            await _db.AnalyticRawServicePasserbyMacList.ExecuteDeleteAsync();
-        }
-
-        for (var i = 0; i < _zones.Count; i++)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var zone = _zones[i];
-            List<AnalyticRawServicePasserbyMacList> result;
-
-            if (!_overwriteDb && _db.AnalyticRawServicePasserbyMacList.Any(x => x.ZoneId == zone.Id))
-            {
-                Console.WriteLine("\tReading from DB...");
-                result = _db.AnalyticRawServicePasserbyMacList.Where(x => x.ZoneId == zone.Id).ToList();
-            }
-            else
-            {
-                Console.WriteLine("\tReading from API...");
-                result = await _worker.GetAnalyticRawServicePasserbyMacList(zone.Id);
-
-                _db.AnalyticRawServicePasserbyMacList.AddRange(result);
-
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
-
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"\tProcessed {i + 1} of {_zones.Count} in {sw.Elapsed}");
-        }
+        await RunForMultiResponse(start, end, context, apiName, dbEntities, dataFetcher);
     }
 }

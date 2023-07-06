@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class AnalyticVisitorService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public AnalyticVisitorService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticVisitorService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -24,7 +24,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCount()
     {
         var apiName = "/1/analytic/visitor/count";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -51,8 +51,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCounts.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -64,7 +62,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountDetails()
     {
         var apiName = "/1/analytic/visitor/countdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -91,8 +89,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -104,7 +100,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorDuration()
     {
         var apiName = "/1/analytic/visitor/duration";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -131,8 +127,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorDurations.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -144,7 +138,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorDurationDetails()
     {
         var apiName = "/1/analytic/visitor/durationdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -171,8 +165,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorDurationDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -184,7 +176,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorBestTimes()
     {
         var apiName = "/1/analytic/visitor/besttimes";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -211,8 +203,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorBestTimes.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -224,7 +214,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountHour()
     {
         var apiName = "/1/analytic/visitor/counthour";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -251,8 +241,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountHours.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -264,7 +252,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountHourDay()
     {
         var apiName = "/1/analytic/visitor/counthourday";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -291,8 +279,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountHourDays.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -304,7 +290,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountHourDayDetails()
     {
         var apiName = "/1/analytic/visitor/counthourdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -331,8 +317,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountHourDayDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -344,7 +328,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountHourDayStart()
     {
         var apiName = "/1/analytic/visitor/counthourdaystart";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -371,8 +355,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountHourDayStart.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -384,7 +366,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountSum()
     {
         var apiName = "/1/analytic/visitor/countsum";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -411,8 +393,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountSum.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -424,7 +404,7 @@ public class AnalyticVisitorService
     public async Task FetchAnalyticVisitorCountCommon()
     {
         var apiName = "/1/analytic/visitor/countcommon";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -451,8 +431,6 @@ public class AnalyticVisitorService
 
                 _db.AnalyticVisitorCountCommon.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }

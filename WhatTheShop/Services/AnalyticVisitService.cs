@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class AnalyticVisitService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public AnalyticVisitService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticVisitService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -24,7 +24,7 @@ public class AnalyticVisitService
     public async Task FetchAnalyticVisitCount()
     {
         var apiName = "/1/analytic/visit/count";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -51,8 +51,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCount.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -64,7 +62,7 @@ public class AnalyticVisitService
     public async Task FetchAnalyticVisitCountDetails()
     {
         var apiName = "/1/analytic/visit/countdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -91,8 +89,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCountDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -104,7 +100,7 @@ public class AnalyticVisitService
     public async Task FetchAnalyticVisitCountHourDetails()
     {
         var apiName = "/1/analytic/visit/counthourdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -131,8 +127,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCountHourDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -144,7 +138,7 @@ public class AnalyticVisitService
     public async Task FetchAnalyticVisitDuration()
     {
         var apiName = "/1/analytic/visit/duration";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -171,8 +165,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitDuration.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -184,7 +176,7 @@ public class AnalyticVisitService
     public async Task FetchAnalyticVisitDurationDetails()
     {
         var apiName = "/1/analytic/visit/durationdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -211,8 +203,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitDurationDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -221,10 +211,11 @@ public class AnalyticVisitService
         }
     }
 
+    // always empty for some reasons...
     public async Task FetchAnalyticVisitCountHour()
     {
         var apiName = "/1/analytic/visit/counthour";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -251,8 +242,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCountHour.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -261,10 +250,11 @@ public class AnalyticVisitService
         }
     }
 
+    // always empty for some reasons...
     public async Task FetchAnalyticVisitCountHourDay()
     {
         var apiName = "/1/analytic/visit/counthourday";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -291,8 +281,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCountHourDay.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -301,10 +289,11 @@ public class AnalyticVisitService
         }
     }
 
+    // always empty for some reasons...
     public async Task FetchAnalyticVisitCountHourDayStart()
     {
         var apiName = "/1/analytic/visit/counthourdaystart";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -331,8 +320,6 @@ public class AnalyticVisitService
 
                 _db.AnalyticVisitCountHourDayStart.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }

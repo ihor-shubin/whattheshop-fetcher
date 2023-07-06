@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
 public class AnalyticSensorService
 {
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
     private readonly List<Zone> _zones;
 
-    public AnalyticSensorService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticSensorService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -24,7 +24,7 @@ public class AnalyticSensorService
     public async Task FetchAnalyticSensorCount()
     {
         var apiName = "/1/analytic/sensor/count";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -51,8 +51,6 @@ public class AnalyticSensorService
 
                 _db.AnalyticSensorCount.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -64,7 +62,7 @@ public class AnalyticSensorService
     public async Task FetchAnalyticSensorCountDetails()
     {
         var apiName = "/1/analytic/sensor/countdetails";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -91,8 +89,6 @@ public class AnalyticSensorService
 
                 _db.AnalyticSensorCountDetails.AddRange(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -101,19 +97,21 @@ public class AnalyticSensorService
         }
     }
 
+    // it requires sensor or hardware id. It's not available in the API
     public async Task FetchAnalyticSensorCountRaw()
     {
         var apiName = " /1/analytic/sensor/countRaw...";
 
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
         // it requires sensor or hardware id. It's not available in the API
         var result = await _worker.GetAnalyticSensorCountRaw(string.Empty);
     }
 
+    // it requires sensor or hardware id. It's not available in the API
     public async Task FetchAnalyticSensorCountDetailsRaw()
     {
         var apiName = "tbd";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         await _db.SaveChangesAsync();
         // it requires sensor or hardware id. It's not available in the API

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WhatTheShop.ApiClient;
 using WhatTheShop.DB;
 using WhatTheShop.Models;
-using WhatTheShop.Utils;
 
 namespace WhatTheShop.Services;
 
@@ -10,10 +10,10 @@ public class AnalyticSystemService
 {
     private readonly DbCtx _db;
     private readonly bool _overwriteDb;
-    private readonly ApiClient _worker;
+    private readonly WhatTheShopApiClient _worker;
     private readonly List<Zone> _zones;
 
-    public AnalyticSystemService(ApiClient worker, DbCtx db, bool overwriteDb = false)
+    public AnalyticSystemService(WhatTheShopApiClient worker, DbCtx db, bool overwriteDb = false)
     {
         _worker = worker;
         _db = db;
@@ -25,7 +25,7 @@ public class AnalyticSystemService
     public async Task FetchAnalyticSystemLastUpdate()
     {
         var apiName = "/1/analytic/system/lastupdate";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -52,8 +52,6 @@ public class AnalyticSystemService
 
                 _db.AnalyticSystemLastUpdate.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -65,7 +63,7 @@ public class AnalyticSystemService
     public async Task FetchAnalyticSystemQuickLastUpdate()
     {
         var apiName = "/1/analytic/system/quicklastupdate";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -92,8 +90,6 @@ public class AnalyticSystemService
 
                 _db.AnalyticSystemQuickLastUpdate.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -105,7 +101,7 @@ public class AnalyticSystemService
     public async Task FetchAnalyticSystemForceRefresh()
     {
         var apiName = "/1/analytic/system/quicklastupdate";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -132,8 +128,6 @@ public class AnalyticSystemService
 
                 _db.AnalyticSystemForceRefresh.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }
@@ -145,7 +139,7 @@ public class AnalyticSystemService
     public async Task FetchAnalyticSystemTemporaryTable()
     {
         var apiName = "/1/analytic/system/temporaryTable";
-        Console.WriteLine($"Fetching {0}...", apiName);
+        Console.WriteLine("Fetching {0}...", apiName);
 
         if (_overwriteDb)
         {
@@ -172,8 +166,6 @@ public class AnalyticSystemService
 
                 _db.AnalyticSystemTemporaryTable.Add(result);
 
-                _db.AAStatus.RemoveIfExists(_db.AAStatus.Find(apiName));
-                _db.AAStatus.Add(new Status(apiName, (i + 1.0) / _zones.Count * 100));
 
                 await _db.SaveChangesAsync();
             }

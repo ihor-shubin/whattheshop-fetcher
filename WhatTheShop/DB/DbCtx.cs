@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net.NetworkInformation;
 using WhatTheShop.Models;
 
 namespace WhatTheShop.DB;
@@ -103,9 +102,8 @@ public class DbCtx: DbContext
     public DbSet<AnalyticVisitCountHourDay> AnalyticVisitCountHourDay { get; set; } = null!;
 
     public DbSet<AnalyticVisitCountHourDayStart> AnalyticVisitCountHourDayStart { get; set; } = null!;
-    
-    public DbSet<Status> AAStatus { get; set; } = null!;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WhatTheShop_dump.sqlite")}");
+    public DbCtx(DbContextOptions options) : base(options)
+    {
+    }
 }
